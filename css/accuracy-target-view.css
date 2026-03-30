@@ -1,0 +1,45 @@
+/* Target SVG container */
+#target-svg-container {
+    width: 100%;
+    max-width: 20rem;
+    margin: auto;
+}
+
+#target-svg-container #target-svg {
+    width: 100%;
+    height: auto;
+}
+
+
+/* Default ring styles */
+#target-svg-container .ring {
+    fill: white;
+    stroke: black;
+    stroke-width: 1;
+}
+
+/* Highlight styles for each ring */
+#target-svg-container .ring.highlight-0 {
+    fill: #00af00;
+    /* Green - Center */
+}
+
+#target-svg-container .ring.highlight-1 {
+    fill: #c8ff00da;
+
+}
+
+#target-svg-container .ring.highlight-2 {
+    fill: #ffff00;
+
+}
+
+#target-svg-container .ring.highlight-3 {
+    fill: #ff8000;
+
+}
+
+#target-svg-container .ring.highlight-4 {
+    fill: #ff0000;
+    /* Red - Outermost */
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!-- Instruction for page dimension control, to make mobile friendly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Ensures compatibility with old Internet Explorer versions -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Live Viewer</title>
+  <meta name="description" content="Live viewer of handheld dental drill.">
+  <meta name="author" content="Manu, Marco, Thomas">
+
+  <!-- import the webpage's stylesheet -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- <link rel="stylesheet" href="css/styles_backup_20241227.css"> -->
+
+  <!-- Import the required three.js modules -->
+  <!-- This must be loaded before any local script -->
+  <script type="importmap">
+    {
+        "imports": {
+            "three": "https://threejs.org/build/three.module.js",
+            "objloader": "https://threejs.org/examples/jsm/loaders/OBJLoader.js",
+            "stlloader": "https://threejs.org/examples/jsm/loaders/STLLoader.js",
+            "orbitcontrols": "https://threejs.org/examples/jsm/controls/OrbitControls.js",
+            "fontloader": "https://threejs.org/examples/jsm/loaders/FontLoader.js",
+            "TextGeometry": "https://threejs.org/examples/jsm/geometries/TextGeometry.js",
+            "GUI": "https://threejs.org/examples/libs/lil-gui.module.min.js"
+        }
+    }
+</script>
+
+  <!-- import the webpage's javascript file -->
+  <script type="module" src="js/main.js" defer></script>
+
+</head>
+
+<!-- ############################################## -->
+
+<body>
+  <!-- ==================== -->
+  <!-- HEADER SECTION START -->
+  <!-- ==================== -->
+  <header class="header">
+    <h1>Dental Drill Live Viewer</h1>
+    <!-- Logo or something -->
+    <img src="assets/assets_static/HEGE_Logo.svg" alt="My Logo" class="logo">
+  </header>
+
+
+  <!-- ==================== -->
+  <!-- MAIN CONTENT START -->
+  <!-- ==================== -->
+  <main class="main">
+
+    <!-- Section for user defined settings and accuracy results view -->
+    <section class="accordion-section">
+      <div class="accordion-header">
+        <h2>Settings, References, Results</h2>
+        <button class="button accordion-toggle">Collapse</button>
+      </div>
+      <div class="accordion-content" id="env-settings-section" data-expanded="true">
+
+        <!-- Section for user defined settings -->
+        <section class="child-section">
+          <div class="child-header">
+            <h3>Settings</h3>
+          </div>
+          <div class="child-content">
+
+            <!-- Environment Settings -->
+            <table class="sub-content">
+              <tr>
+                <td>Background:</td>
+                <td></td>
+                <td>
+                  <input type="color" id="background-color" class="color-picker" data-group="background"
+                    data-describes="color">
+                </td>
+              </tr>
+              <tr>
+                <td>Target Vector:</td>
+                <td></td>
+                <td>
+                  <input type="color" class="color-picker" data-group="target" data-describes="color">
+                </td>
+              </tr>
+              <tr>
+                <td>Driller Model:</td>
+                <td>
+                  <select id="driller-model-shape" class="dropdown" data-group="driller-model" data-describes="shape">
+                    <option value="shape-1" selected>Driller Shape 1</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="color" id="driller-model-color" class="color-picker" data-group="driller-model"
+                    data-describes="color">
+                </td>
+              </tr>
+              <tr>
+                <td>Reference Model:</td>
+                <td>
+                  <select id="ref-model-shape" class="dropdown" data-group="ref-model" data-describes="shape">
+                    <option value="shape-1" selected>Ref Shape 1</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="color" id="ref-model-color" class="color-picker" data-group="ref-model"
+                    data-describes="color">
+                </td>
+              </tr>
+            </table>
+
+            <!-- Target Vector and Ref-Object Position Sliders -->
+            <table class="sub-content">
+              <!-- Position Sliders -->
+              <tr>
+                <td><label for="ref-model-xSlider">X:</label></td>
+                <td><input type="range" id="ref-model-xSlider" min="-50" max="50" value="0" class="slider"
+                    data-group="ref-model" data-describes="position" data-axis="x"></td>
+                <td><input type="number" id="ref-model-xSlider-input" min="-50" max="50" value="0" class="slider-input"
+                    data-group="ref-model" data-describes="position" data-axis="x"></td>
+              </tr>
+              <tr>
+                <td><label for="ref-model-ySlider">Y:</label></td>
+                <td><input type="range" id="ref-model-ySlider" min="-50" max="50" value="0" class="slider"
+                    data-group="ref-model" data-describes="position" data-axis="y"></td>
+                <td><input type="number" id="ref-model-ySlider-input" min="-50" max="50" value="0" class="slider-input"
+                    data-group="ref-model" data-describes="position" data-axis="y"></td>
+              </tr>
+              <tr>
+                <td><label for="ref-model-zSlider">Z:</label></td>
+                <td><input type="range" id="ref-model-zSlider" min="-50" max="50" value="0" class="slider"
+                    data-group="ref-model" data-describes="position" data-axis="z"></td>
+                <td><input type="number" id="ref-model-zSlider-input" min="-50" max="50" value="0" class="slider-input"
+                    data-group="ref-model" data-describes="position" data-axis="z"></td>
+              </tr>
+              <!-- Spacer -->
+              <tr>
+                <td colspan="3" class="spacer"></td>
+              </tr>
+              <!-- Target Vector Sliders -->
+              <tr>
+                <td><label for="target-inclinationSlider">Inclination:</label></td>
+                <td><input type="range" id="target-inclinationSlider" min="0" max="180" value="0" class="slider"
+                    data-group="target" data-describes="orientation" data-axis="inclination"></td>
+                <td><input type="number" id="target-inclinationSlider-input" min="0" max="180" value="0"
+                    class="slider-input" data-group="target" data-describes="orientation" data-axis="inclination"></td>
+              </tr>
+              <tr>
+                <td><label for="target-azimuthSlider">Azimuth:</label></td>
+                <td><input type="range" id="target-azimuthSlider" min="0" max="360" value="0" class="slider"
+                    data-group="target" data-describes="orientation" data-axis="azimuth"></td>
+                <td><input type="number" id="target-azimuthSlider-input" min="0" max="360" value="0"
+                    class="slider-input" data-group="target" data-describes="orientation" data-axis="azimuth"></td>
+              </tr>
+            </table>
+
+          </div>
+        </section>
+        <!-- End of Section for user defined settings -->
+
+        <!-- Section for the accuracy output and the graph illustrating accuracy -->
+        <section class="child-section">
+          <div class="child-header">
+            <h3>Results & Accuracy</h3>
+          </div>
+
+          <!-- Accuracy Graph -->
+          <div class="child-content">
+            <div class="sub-content">
+              <div id="target-svg-container"></div>
+            </div>
+
+            <!-- Results Table -->
+            <table class="sub-content">
+              <tr>
+                <td>Pitch to World:</td>
+                <td id="pitch-to-world">-</td>
+              </tr>
+              <tr>
+                <td>Roll to World:</td>
+                <td id="roll-to-world">-</td>
+              </tr>
+              <tr>
+                <td>Pitch to Reference:</td>
+                <td id="pitch-to-ref">-</td>
+              </tr>
+              <tr>
+                <td>Roll to Reference:</td>
+                <td id="roll-to-ref">-</td>
+              </tr>
+              <tr>
+                <td>Accuracy:</td>
+                <td id="accuracy">-</td>
+              </tr>
+            </table>
+
+          </div>
+        </section>
+        <!-- End Section for user defined settings and accuracy results view -->
+
+        <!-- Section for calibration of sensor data -->
+        <section class="child-section">
+          <div class="child-header">
+            <h3>Calibration</h3>
+          </div>
+
+          <!-- Calibration Buttons -->
+          <div class="child-content sub-content">
+            <button id="btn-calibr-quick" type="button">Quick Calibration</button>
+            <button id="btn-calibr-long" type="button">Start Long Calibration</button>
+            <button id="btn-calibr-zrotation" type="button">Align only XY Axes</button>
+          </div>
+        </section>
+        <!-- End Section for calibration of sensor data -->
+
+      </div>
+    </section>
+    <!-- End Section for user defined settings and accuracy results view -->
+
+    <!-- Section 3D illustration of connected object -->
+    <section class="accordion-section">
+      <div class="accordion-header">
+        <h2>3D Animation</h2>
+        <button class="button accordion-toggle">Collapse</button>
+      </div>
+      <div class="accordion-content" data-expanded="true">
+        <!-- Animation Display Area -->
+        <div class="animation-container">
+          <canvas id="canvas"></canvas>
+          <div class="error-message hidden">
+            WebGL is not supported in your browser!
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End of Section 3D illustration of connected object -->
+
+    <!-- Section for serial input log -->
+    <section class="accordion-section">
+      <div class="accordion-header">
+        <h2>Log - Serial Input</h2>
+        <button class="button accordion-toggle">Collapse</button>
+      </div>
+      <div class="accordion-content flex-col" data-expanded="true">
+        <div class="sub-content">
+          <!-- Section for console output -->
+          <div id="input-log" class="log"></div>
+        </div>
+        <!-- Controls for log -->
+        <div class="sub-content flex-row">
+          <input type="checkbox" id="input-log__autoscroll"> Autoscroll
+          <input type="checkbox" id="input-log__timestamp"> Show Timestamp
+          <button type="button" id="input-log__clear">Clear</button>
+        </div>
+      </div>
+    </section>
+    <!-- End of Section for serial input log -->
+
+    <!-- Section for result log -->
+    <section class="accordion-section">
+      <div class="accordion-header">
+        <h2>Log - Results</h2>
+        <button class="button accordion-toggle">Collapse</button>
+      </div>
+      <div class="accordion-content flex-col" data-expanded="true">
+        <div class="sub-content">
+          <!-- Section for console console output -->
+          <div id="results-log" class="log"></div>
+        </div>
+        <!-- Controls for log -->
+        <div class="flex-row gap">
+          <input type="checkbox" id="results-log__autoscroll"> Autoscroll
+          <input type="checkbox" id="results-log__timestamp"> Show Timestamp
+          <button type="button" id="results-log__clear">Clear</button>
+        </div>
+      </div>
+    </section>
+    <!-- End of Section for result log -->
+
+
+  </main>
+
+
+
+
+
+  <!-- ==================== -->
+  <!-- FOOTER SECTION START -->
+  <!-- ==================== -->
+  <footer class="footer">
+    <!-- Section for Connection Control -->
+    <div class="connect-group">
+      <button id="btn-connect" type="button">Connect</button>
+
+      <select id="baudrate" title="Select a baudrate for the microcontroller communication!">
+        <option value="" disabled selected>--Baudrate--</option>
+        <option value=9600>9600</option>
+      </select>
+      <select id="angle-type" title="Select a angle type as input, given by the microcontroller!">
+        <option value="" disabled selected>--Angle Type--</option>
+        <option value="quaternion">Quaternions</option>
+        <option value="euler">Euler Angles</option>
+      </select>
+    </div>
+    <!-- End of Section for Connection Control -->
+
+    <!-- Section for Calibration Status -->
+    <div class="calibration-group">
+      <div class="calibration-pair">
+        <span>System:</span>
+        <span id="calValue_system">-</span>
+      </div>
+      <div class="calibration-pair">
+        <span>Gyro:</span>
+        <span id="calValue_gyro">-</span>
+      </div>
+      <div class="calibration-pair">
+        <span>Accelerometer:</span>
+        <span id="calValue_accelometer">-</span>
+      </div>
+      <div class="calibration-pair">
+        <span>Magnetometer:</span>
+        <span id="calValue_magnetometer">-</span>
+      </div>
+    </div>
+    <!-- End of Section for Calibration Status -->
+  </footer>
+
+
+</body>
+
+</html>

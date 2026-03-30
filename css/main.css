@@ -1,0 +1,436 @@
+/* =====================
+    IMPORTS
+   ===================== */
+@import "colors.css";
+@import "accuracy-target-view.css";
+
+
+/* =====================
+    ROOT STYLES
+   ===================== */
+/* Define global variables and base styles, like */
+
+:root {
+  /* Base font size */
+  font-size: 16px;
+
+  /* Typography scale */
+  --scale-ratio: 1.25;
+  --font-size-xs: calc(1rem / var(--scale-ratio));
+  --font-size-sm: 1rem;
+  --font-size-md: calc(1rem * var(--scale-ratio));
+  --font-size-lg: calc(1rem * var(--scale-ratio) * var(--scale-ratio));
+  --font-size-xl: calc(1rem * var(--scale-ratio) * var(--scale-ratio) * var(--scale-ratio));
+}
+
+html {
+  font-size: var(--font-size-sm);
+  scroll-behavior: smooth;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* =====================
+    TYPOGRAPHY
+   ===================== */
+/* Define text styles for headings, paragraphs, links */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+  color: var(--color-secondary-dark);
+}
+
+h3 {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+}
+
+p {
+  font-size: var(--font-size-sm);
+  margin-bottom: 1em;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+
+/* =====================
+    LAYOUT
+   ===================== */
+/* Define structure and layout for header, footer, main, accordions */
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header .logo {
+  max-height: 50px;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background-color: var(--color-background-secondary);
+}
+
+/* Footer */
+.footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--color-secondary-dark);
+  color: var(--color-white);
+}
+
+.footer .connect-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer .calibration-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.calibration-group .calibration-pair {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.calibration-pair span:last-child {
+  min-width: calc(10ch);
+}
+
+/* SECTION STYLES */
+/* The parent section should contain some headline and */
+/* behaves like an accordion, which can be collapsed. */
+/* Parent sections have one or multiple child sections */
+/* Parent Section = Accordion Section */
+
+
+/* Accordion Section */
+.accordion-section {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: var(--color-gray-100);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-header h2 {
+  margin: 0;
+}
+
+.accordion-content {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+
+/* Child Sections */
+/* The child section should contain some small headline and */
+/* can have smaller sub-sections or groups or direct content */
+.child-section {
+  border: 1px solid var(--color-gray-300);
+  /* Light gray border */
+  border-radius: 0.2rem;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.05);
+  /* Very subtle shadow */
+}
+
+.child-header {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.child-header h3 {
+  margin: 0;
+}
+
+/* Content styles */
+.child-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem;
+}
+
+.sub-content {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+
+/* Animation Canvas and Log */
+.animation-container {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+
+  /* Fill out container if possible */
+  width: 100%;
+  /* 90% of the viewport width */
+  max-width: 70vw;
+  /* 80% of the viewport height */
+  max-height: 60vh;
+  /* Maintains the desired ratio */
+  aspect-ratio: 4 / 3;
+  /* Other good ratios: 4/3, 16/10, 16/9, 21/9 */
+
+  /* Centers the container */
+  margin: 0 auto;
+
+  background-color: var(--color-background-secondary);
+
+  /* Some settings in case of error: */
+  /* Important for error message positioning */
+  position: relative;
+}
+
+
+.log {
+  height: 10rem;
+  /* Set a fixed height */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  border: 1px solid #ccc;
+  /* Optional: Add a border */
+  padding: 10px;
+  /* Optional: Add some padding */
+}
+
+
+
+
+/* =====================
+    COMPONENTS
+   ===================== */
+/* Define reusable styles for buttons, inputs, sliders */
+
+/* Buttons */
+button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+  gap: 0;
+  vertical-align: middle;
+}
+
+/* Inputs */
+input {
+  padding: 0.5rem;
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+/* Sliders */
+.slider {
+  width: 100%;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  /* Collapse borders - No space between cell borders. */
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+tr,
+td {
+  padding: 0.5rem;
+  text-align: left;
+  border: 1px solid var(--color-border);
+}
+
+td input,
+td select {
+  width: 100%;
+  padding: 0.2rem;
+  font-size: var(--font-size-sm);
+}
+
+td input[type="number"] {
+  max-width: 60px;
+  text-align: right;
+}
+
+td input[type="color"] {
+  width: 3rem;
+  padding: 0;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  /* Removes extra space around the canvas */
+  display: block;
+}
+
+/* Error messages */
+.error-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--color-error);
+
+  font-size: var(--font-size-lg);
+  text-align: center;
+  text-wrap: wrap;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+
+/* =====================
+    UTILITY CLASSES
+     ===================== */
+/* Define utility classes for display helpers, paddings, alignments, etc. */
+/* Those classes can be used to quickly apply styles to elements */
+/* without writing custom CSS rules. */
+/* This should be used sparingly and only for common styles. */
+
+.hidden {
+  display: none;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.center {
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.right {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.gap {
+  gap: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
